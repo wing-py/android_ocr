@@ -1,0 +1,32 @@
+public class MainActivity extends AppCompatActivity {
+    private ImageView iv;
+    private String filePath;
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+        iv=findViewById(R.id.imageView);
+        filePath= Environment.getExternalStorageDirectory().getPath();filePath+="/image.png";     /*set path*/
+        Button btn=findViewById(R.id.btn);
+        btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent=new Intent(MediaStore.ACTION_IMAGE_CAPTURE);      /*the hind way to use intent*/
+                Uri picuri=Uri.fromFile(new File(filePath))   ;                 /*get  uri*/
+                intent.putExtra(MediaStore.EXTRA_OUTPUT,picuri);
+                startActivityForResult(intent,0x2);
+                try {
+                    FileInputStream is=new FileInputStream(filePath);
+                    Bitmap bitmap= BitmapFactory.decodeStream(is);
+                    iv.setImageBitmap(bitmap);
+                } catch (FileNotFoundException e) {
+                    e.printStackTrace();
+                }
+
+
+
+            }
+        });
+    }
+
+}
